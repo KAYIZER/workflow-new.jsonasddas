@@ -1,5 +1,6 @@
 # clean base image containing only comfyui, comfy-cli and comfyui-manager
-FROM runpod/worker-comfyui:5.5.1-base
+# Downgrading to 4.0.0 to avoid CUDA 12.6 requirement (using CUDA 12.1 instead)
+FROM runpod/worker-comfyui:4.0.0-base
 
 # install custom nodes into comfyui (first node with --mode remote to fetch updated cache)
 # The workflow included custom nodes under `unknown_registry` but no aux_id (GitHub repo) was provided for any of them,
