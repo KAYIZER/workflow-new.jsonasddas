@@ -23,7 +23,9 @@ RUN comfy node install ComfyUI_Essentials
 RUN git config --global --add safe.directory /comfyui && \
     cd /comfyui && \
     git checkout master && \
-    git pull
+    git pull && \
+    pip install --no-cache-dir -r requirements.txt && \
+    pip install sqlalchemy
 
 
 
