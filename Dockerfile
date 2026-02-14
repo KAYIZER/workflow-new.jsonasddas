@@ -10,13 +10,15 @@ FROM runpod/worker-comfyui:4.0.0-base
 # - TextEncodeQwenImageEditPlus (unknown_registry) - duplicate, no aux_id provided, skipped
 # - ConditioningZeroOut (unknown_registry) - no aux_id provided, skipped
 # Install git and comfy-cli (Required for 4.0.0-base)
+# Explicitly use python3.11 because RunPod runtime uses 3.11, but build default is 3.10
 RUN apt-get update && apt-get install -y git && \
-    pip install --upgrade pip && \
-    pip install comfy-cli
+    python3.11 -m pip install --upgrade pip && \
+    python3.11 -m pip install comfy-cli
 
 # Install custom nodes using Comfy CLI
 RUN comfy node install qweneditutils
-RUN comfy node install ComfyUI_Essentials
+RUN comfy node install ComfyUI_Essentials && \
+    python3.11 -m pip install --no-cache-dir -r /comfyui/custom_nodes/ComfyUI_Essentials/requirements.txt
 
 # Update ComfyUI to latest version (Critical for Z-Image Turbo model support)
 # We handle git safety due to ownership changes in docker
@@ -24,8 +26,8 @@ RUN git config --global --add safe.directory /comfyui && \
     cd /comfyui && \
     git checkout master && \
     git pull && \
-    pip install --no-cache-dir -r requirements.txt && \
-    pip install sqlalchemy
+    python3.11 -m pip install --no-cache-dir -r requirements.txt && \
+    python3.11 -m pip install sqlalchemy
 
 
 
